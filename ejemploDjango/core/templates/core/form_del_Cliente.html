@@ -23,7 +23,7 @@
             <td>edad</td>
             <td>comentario</td>
         </tr>
-        {% for dato in clientes%}
+        {% for dato in Cliente%}
         <tr>
             <td>{{dato.nombre}}</td>
             <td>{{dato.apellido}}</td>
@@ -36,9 +36,8 @@
             <td><a href="{% url 'form_del_Cliente' dato.nombre %}">Eliminar</a></td>
         </tr>
 
-        {% endblock %}
+        {% endfor %}
 
     </table>
-    <a href="{% url 'form_Cliente'%}">nuevo cliente</a>
+    <a href="{% url 'form_del_Cliente'%}">nuevo cliente</a>
 </div>
-

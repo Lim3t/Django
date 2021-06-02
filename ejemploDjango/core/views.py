@@ -1,15 +1,59 @@
-from django.shortcuts import render
+from ejemploDjango.ejemploDjango.settings import DATABASES
+from django.shortcuts import render,redirect
+from .models import Cliente
+from .form import ClienteForm
 
 # Create your views here.
-class Persona:
-    def __init__(self,nombre,edad):
+def index(request):
+    return render(request,'core/index.html')
+    
+class persona:
+     def __init__(self,nombre,edad):
         self.nombre=nombre
         self.edad=edad
         super().__init__()
+        
+        
+def Test(request):
+    
+    clientes= Cliente.objects.all()
+    
+    datos={
+        'clientes':clientes
+    }
+    return render(request,'core/test.html',datos)
+
+def form_Cliente(request,id):
+    if request.method =='POST':
+        formulario = ClienteForm(request.POST)
+        
+        if formulario.is_valid:
+            formulario.save()
+            DATABASES['mensaje']='Guardado Correctamente'
+            return render(request,'core/form_Cliente.html',data)
 
 
-def index(request):
-    return render(request,'core/index.html')
+def form_mod_Cliente(request,id):
+    cliente= Cliente.objects.get(nombre=id)
+    data= {
+        'form' :ClienteForm(instance=Cliente)
+    }
+
+    if request.method =='POST':
+        formulario=ClienteForm(data=request.POST,instance=Cliente)
+        
+        if formulario.is_valid:
+            formulario.save()
+            data['mensaje']="guardado"
+            return render(request,'core/form_Cliente.html',data)
+        
+def form_del_cliente(request,id):
+    cliente= Cliente.objects.get(nombre=id)
+    cliente.delete()
+    return redirect(to="test")
+    
+    
+
 
 def reparto(request):
     return render(request,'core/reparto.html')
@@ -28,11 +72,3 @@ def lista(request):
 
 def productos(request):
     return render(request,'core/productos.html')
-
-def test(request):
-
-    persona=Persona("Elias",18)
-    lista=["dato1","dato2","dato3"]
-    context ={"nombre":"elias villar","persona":persona,"datos":lista}
-
-    return render(request,'core/test.html',context)
